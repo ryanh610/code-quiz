@@ -68,7 +68,15 @@ section {
     flex-direction: column;
 }
 
-#score {
+#initials * {
     display: flex;
     flex-direction: column;
+    margin: 10px 10px 0 0;
+    font-weight: bold;
+}
+
+#score * {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 10px 0 0;
 }

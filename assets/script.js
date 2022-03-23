@@ -23,7 +23,6 @@ var buttons = $('.answerButton');
 var details = $('#details');
 var leaderboard = $('#leaderboard');
 var leaderboardBtn = $('#viewLeaderboard');
-var initialEntry = $('#initialEntry');
 var timerInterval;
 
 buttons.hide();
@@ -195,10 +194,13 @@ function refreshLeaderboard() {
     var leaderboard = localStorage.getItem('leaderboard');
     var initials = $('#initials');
     var score = $('#score');
+    initials.empty();
+    score.empty();
 
     console.log(leaderboard);
     if (leaderboard !== null) {
-        for (entry of leaderboard) {
+        var leaderboardList = JSON.parse(leaderboard);
+        for (entry of leaderboardList) {
             initials.append($("<p></p>").text(entry.name));
             score.append($("<p></p>").text(entry.score));
         }
@@ -216,25 +218,24 @@ function displayLeaderboard() {
     var entry;
     var leaderboardList = localStorage.getItem('leaderboard');
     if (leaderboardList === undefined) {
-        localStorage.setItem('leaderboard', []);
-        leaderboardList = localStorage.getItem('leaderboard');
+        localStorage.setItem('leaderboard', JSON.stringify([]));
+        leaderboardList = JSON.parse(localStorage.getItem('leaderboard'));
     }
 
     $('#initialEntry').submit(function(event) {
         event.preventDefault();
-        entry = initialEntry.val();
+        entry = $('#initialsInput').val();
+        console.log(entry);
         if (leaderboardList === null) {
-            localStorage.setItem('leaderboard', [{name: entry, score: secondsLeft}]);
+            localStorage.setItem('leaderboard',  JSON.stringify([{name: entry, score: secondsLeft}]));
         } else {
-            leaderboardList.push({name: entry, score: secondsLeft});
-            localStorage.setItem('leaderboard', leaderboardList);
+            var newLeaderboardList = JSON.parse(leaderboardList);
+            newLeaderboardList.push({name: entry, score: secondsLeft});
+            localStorage.setItem('leaderboard', JSON.stringify(newLeaderboardList));
         }
         refreshLeaderboard();
+        $('#initialEntry').hide()
     });
-
-    //local storage
-    //create object for each entry
-    //children of objects 
 
     refreshLeaderboard();
 };
