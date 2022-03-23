@@ -57,3 +57,18 @@ section {
 #mainPrompt {
     font-size: 30px;
 }
+
+#ranks {
+    display: flex;
+    flex-direction: row;
+}
+
+#names {
+    display: flex;
+    flex-direction: column;
+}
+
+#score {
+    display: flex;
+    flex-direction: column;
+}

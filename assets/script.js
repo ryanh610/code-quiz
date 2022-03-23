@@ -10,12 +10,7 @@
 // WHEN the game is over
 // THEN I can save my initials and my score
 
-// I need a start button to trigger the time interval
-// Upon start, begin countdown
-// Change text of questions with .textContent method and new if/else
-// Use DOM and data-state to create answer buttons and leaderboard
-
-var secondsLeft = 60
+var secondsLeft = 0;
 var start = $('#startButton');
 var timeLeft = $('#time');
 var mainPrompt = $('#mainPrompt');
@@ -23,25 +18,35 @@ var buttonOne = $('#buttonOne');
 var buttonTwo = $('#buttonTwo');
 var buttonThree = $('#buttonThree');
 var buttonFour = $('#buttonFour');
-var correctFalse = $('#correctFalse')
-// var button = $('.button');
+var correctFalse = $('#correctFalse');
+var buttons = $('.answerButton');
+var details = $('#details');
+var leaderboard = $('#leaderboard');
+var leaderboardBtn = $('#viewLeaderboard');
+var initialEntry = $('#initialEntry');
+var timerInterval;
 
-// function shadow(event) {
-//     event.target().css('background-color', 'rgb(128, 75, 128)')
+buttons.hide();
+leaderboard.hide();
+timeLeft.hide();
 
-function startQuiz (event) {
+function startQuiz () {
     firstQuestion()
-    var timerInterval = setInterval(function() {
+    secondsLeft = 60;
+    timeLeft.show();
+    timerInterval = setInterval(function() {
         secondsLeft --;
         timeLeft.text(secondsLeft + " s");
         if (secondsLeft === 0) {
             displayLeaderboard();
-            // Display leaderboard
-        }
+        };
     }, 1000);
 };
 
 function firstQuestion() {
+    start.hide();
+    details.hide();
+    buttons.show();
     mainPrompt.text("What is HTML?");
     buttonOne.text("HTML is the text displayed on the browser tab");
     buttonTwo.text("HTML is a language used to create the main elements of a webpage");
@@ -61,7 +66,6 @@ function firstQuestion() {
         correctFalse.text("False!");
         secondsLeft -= 10;
         secondQuestion();
-
     });
     buttonFour.on("click", function() {
         correctFalse.text("False!");
@@ -76,6 +80,7 @@ function secondQuestion () {
     buttonTwo.text("CSS is a mathematical formula");
     buttonThree.text("CSS is a language used to create executables in a document");
     buttonFour.text("CSS is a popular type of pet in the Netherlands");
+    buttons.off("click");
 
     buttonOne.on("click", function() {
         correctFalse.text("Correct!");
@@ -105,6 +110,7 @@ function thirdQuestion() {
     buttonTwo.text("JS is a machine learning algorithm");
     buttonThree.text("JS is the name of an ancient Greek belief in Santa Claus");
     buttonFour.text("JS is a language used to make a webpage interactive");
+    buttons.off("click");
 
     buttonOne.on("click", function() {
         correctFalse.text("False!");
@@ -133,6 +139,7 @@ function fourthQuestion() {
     buttonTwo.text("CSS traversal");
     buttonThree.text("HTML Bingo");
     buttonFour.text("My neighbor who works for the police");
+    buttons.off("click");
 
     buttonOne.on("click", function() {
         correctFalse.text("Correct!");
@@ -161,6 +168,7 @@ function fifthQuestion() {
     buttonTwo.text("JS");
     buttonThree.text("HTML");
     buttonFour.text("Java");
+    buttons.off("click");
 
     buttonOne.on("click", function() {
         correctFalse.text("Correct!");
@@ -183,10 +191,56 @@ function fifthQuestion() {
     });
 }
 
-function displayLeaderboard() {
-    clearInterval(timerInterval);
+function refreshLeaderboard() {
+    var leaderboard = localStorage.getItem('leaderboard');
+    var initials = $('#initials');
+    var score = $('#score');
 
+    console.log(leaderboard);
+    if (leaderboard !== null) {
+        for (entry of leaderboard) {
+            initials.append($("<p></p>").text(entry.name));
+            score.append($("<p></p>").text(entry.score));
+        }
+    }
 }
 
-start.click(startQuiz)
-// button.on('mousedown', shadow)
+function displayLeaderboard() {
+    clearInterval(timerInterval);
+    buttons.hide();
+    correctFalse.hide();
+    mainPrompt.hide();
+    start.hide();
+    details.hide();
+    leaderboard.show();
+    var entry;
+    var leaderboardList = localStorage.getItem('leaderboard');
+    if (leaderboardList === undefined) {
+        localStorage.setItem('leaderboard', []);
+        leaderboardList = localStorage.getItem('leaderboard');
+    }
+
+    $('#initialEntry').submit(function(event) {
+        event.preventDefault();
+        entry = initialEntry.val();
+        if (leaderboardList === null) {
+            localStorage.setItem('leaderboard', [{name: entry, score: secondsLeft}]);
+        } else {
+            leaderboardList.push({name: entry, score: secondsLeft});
+            localStorage.setItem('leaderboard', leaderboardList);
+        }
+        refreshLeaderboard();
+    });
+
+    //local storage
+    //create object for each entry
+    //children of objects 
+
+    refreshLeaderboard();
+};
+
+
+
+    
+start.click(startQuiz);
+leaderboardBtn.click(displayLeaderboard);
