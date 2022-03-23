@@ -7,17 +7,22 @@
     <body>
         <header>
             <p class="header" id="viewLeaderboard"> View Leaderboard</p>
-            <p class="header" id="time">Time Left:</p>
+            <p class="header">Time Left:<span id="time"></span></p>
         </header>
         <section>
             <h1 id="mainPrompt">Coding Quiz</h1>
-            <p id="details">This is my coding quiz. Here is a bunch of filler. Enjoy this filler. It is healthy.</p>
-            <p class="button" id="startButton">Start</p>
-            <p class="button" id="buttonOne">Answer 1</p>
-            <p class="button" id="buttonTwo">Answer 2</p>
-            <p class="button" id="buttonThree">Answer 3</p>
-            <p class="button" id="buttonFour">Answer 4</p>
+            <p id="details">Welcome to my coding quiz. you have 60 seconds to answer 5 questions. each question wrong subtracts 10 seconds from you time.<br>
+                Your remaining time at the end is your final score.</p>
+            <p class="button" id="startButton" data-state="visible">Start</p>
+            <p class="button" id="buttonOne" data-state="hidden">Answer 1</p>
+            <p class="button" id="buttonTwo" data-state="hidden">Answer 2</p>
+            <p class="button" id="buttonThree" data-state="hidden">Answer 3</p>
+            <p class="button" id="buttonFour" data-state="hidden">Answer 4</p>
+            <p id="correctFalse"></p>
 
         </section>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="./assets/script.js"></script>
     </body>
 </html>
